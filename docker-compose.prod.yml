@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  football-bot:
+    image: "${REMOTE_DOCKER_IMAGE:-diallo/diallo:latest}"
+    restart: unless-stopped
+    environment:
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - TELEGRAM_MODEL_PATH=${TELEGRAM_MODEL_PATH:-/app/models/poisson_baseline.joblib}
+      - DRY_RUN=${DRY_RUN:-0}
+    volumes:
+      - ./models:/app/models:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
